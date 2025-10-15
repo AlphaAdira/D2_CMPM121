@@ -10,6 +10,12 @@ canvas.width = 256;
 canvas.height = 256;
 document.body.append(canvas);
 
+document.body.append(document.createElement("br"));
+
+const clearButton = document.createElement("button");
+clearButton.innerHTML = "clear";
+document.body.append(clearButton);
+
 const ctx = canvas.getContext("2d");
 if (!ctx) {
   throw new Error("commit plz");
@@ -40,11 +46,6 @@ canvas.addEventListener("mouseup", () => {
   cursor.active = false;
 });
 
-document.body.append(document.createElement("br"));
-
-const clearButton = document.createElement("button");
-clearButton.innerHTML = "clear";
-document.body.append(clearButton);
 clearButton?.addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
