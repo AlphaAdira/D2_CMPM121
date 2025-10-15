@@ -31,10 +31,10 @@ canvas.addEventListener("mousedown", (e) => {
   cursor.x = e.offsetX;
   cursor.y = e.offsetY;
 
-    //add points to array
-    currentLine = [];
-    drawnLines.push(currentLine);
-    currentLine.push({ x: cursor.x, y: cursor.y });
+  //add points to array
+  currentLine = [];
+  currentLine.push({ x: cursor.x, y: cursor.y });
+  drawnLines.push(currentLine);
 });
 
 canvas.addEventListener("mousemove", (e) => {
@@ -47,7 +47,7 @@ canvas.addEventListener("mousemove", (e) => {
     ctx.stroke();
     cursor.x = e.offsetX;
     cursor.y = e.offsetY;
-    
+
     //add points to array
     currentLine.push({ x: cursor.x, y: cursor.y });
   }
@@ -55,6 +55,7 @@ canvas.addEventListener("mousemove", (e) => {
 
 canvas.addEventListener("mouseup", () => {
   cursor.active = false;
+  currentLine = null;
 });
 
 clearButton?.addEventListener("click", () => {
