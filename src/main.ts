@@ -3,6 +3,14 @@ import "./style.css";
 
 document.body.innerHTML = `
   <h1>[App Title]</h1>
-  <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
-  <canvas width="256" height="256"></canvas> 
 `;
+
+const canvas = document.createElement("canvas");
+canvas.width = 256;
+canvas.height = 256;
+document.body.append(canvas);
+
+const ctx = canvas.getContext("2d");
+if (!ctx) {
+  throw new Error("commit plz");
+}
