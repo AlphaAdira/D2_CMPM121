@@ -23,10 +23,18 @@ if (!ctx) {
 
 const cursor = { active: false, x: 0, y: 0 };
 
+const drawnLines = [];
+let currentLine = null;
+
 canvas.addEventListener("mousedown", (e) => {
   cursor.active = true;
   cursor.x = e.offsetX;
   cursor.y = e.offsetY;
+
+    //add points to array
+    currentLine = [];
+    drawnLines.push(currentLine);
+    currentLine.push({ x: cursor.x, y: cursor.y });
 });
 
 canvas.addEventListener("mousemove", (e) => {
@@ -39,6 +47,9 @@ canvas.addEventListener("mousemove", (e) => {
     ctx.stroke();
     cursor.x = e.offsetX;
     cursor.y = e.offsetY;
+    
+    //add points to array
+    currentLine.push({ x: cursor.x, y: cursor.y });
   }
 });
 
