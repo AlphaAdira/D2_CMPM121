@@ -3,7 +3,6 @@ import "./style.css";
 
 document.body.innerHTML = `
   <h1>[App Title]</h1>
-  <button id = "clearbutton">Clear</button>
 `;
 
 const canvas = document.createElement("canvas");
@@ -41,7 +40,11 @@ canvas.addEventListener("mouseup", () => {
   cursor.active = false;
 });
 
-const clearButton = document.getElementById("clearbutton");
+document.body.append(document.createElement("br"));
+
+const clearButton = document.createElement("button");
+clearButton.innerHTML = "clear";
+document.body.append(clearButton);
 clearButton?.addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 });

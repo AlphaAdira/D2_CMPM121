@@ -6,5 +6,5 @@
 canvas {
   border: 1px solid #000000;
   border-radius: 10px;
-  filter: drop-shadow(-10px -10px 10px #000000);
+  filter: drop-shadow(-1px -1px 1px #000000);
 }
