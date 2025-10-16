@@ -23,8 +23,13 @@ if (!ctx) {
 
 const cursor = { active: false, x: 0, y: 0 };
 
-const drawnLines = [];
-let currentLine = null;
+interface Point {
+  x: number;
+  y: number;
+}
+
+let drawnLines: Point[][] = [];
+let currentLine: Point[] | null = null;
 
 canvas.addEventListener("mousedown", (e) => {
   cursor.active = true;
@@ -33,31 +38,43 @@ canvas.addEventListener("mousedown", (e) => {
 
   //add points to array
   currentLine = [];
-  currentLine.push({ x: cursor.x, y: cursor.y });
   drawnLines.push(currentLine);
+  currentLine.push({ x: cursor.x, y: cursor.y });
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (cursor.active) {
-    ctx.beginPath();
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.moveTo(cursor.x, cursor.y);
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.stroke();
-    cursor.x = e.offsetX;
-    cursor.y = e.offsetY;
-
+  if (cursor.active && currentLine) {
     //add points to array
-    currentLine.push({ x: cursor.x, y: cursor.y });
+    currentLine.push({ x: e.offsetX, y: e.offsetY });
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
 
 canvas.addEventListener("mouseup", () => {
-  cursor.active = false;
+  if (currentLine && currentLine.length > 0) {
+    drawnLines.push(currentLine);
+    canvas.dispatchEvent(new Event("drawing-changed"));
+  }
   currentLine = null;
+  cursor.active = false;
+});
+
+canvas.addEventListener("drawing-changed", () => {
+  const ctx = canvas.getContext("2d")!;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawnLines.forEach(line => {
+    if (line.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(line[0]!.x, line[0]!.y);
+    for (let i = 1; i < line.length; i++) {
+      ctx.lineTo(line[i]!.x, line[i]!.y);
+    }
+    ctx.stroke();
+  });
 });
 
 clearButton?.addEventListener("click", () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawnLines = [];
+  canvas.dispatchEvent(new Event("drawing-changed"));
 });
