@@ -38,7 +38,7 @@ interface Point {
 
 let drawnLines: Point[][] = [];
 let currentLine: Point[] | null = null;
-let undoneLines: Point[] | null = null;
+let undoneLines: Point[][] = [];
 
 canvas.addEventListener("mousedown", (e) => {
   cursor.active = true;
@@ -47,6 +47,7 @@ canvas.addEventListener("mousedown", (e) => {
 
   //add points to array
   currentLine = [];
+  undoneLines = [];
   currentLine.push({ x: cursor.x, y: cursor.y });
 });
 
@@ -104,6 +105,16 @@ undoButton?.addEventListener("click", () => {
     const lastLine = drawnLines.pop()!;
     if (!lastLine) {
       undoneLines!.push(lastLine);
+    }
+    canvas.dispatchEvent(new Event("drawing-changed"));
+  }
+});
+
+redoButton?.addEventListener("click", () => {
+  if (undoneLines && undoneLines.length > 0) {
+    const lineToRedo = undoneLines.pop()!;
+    if (lineToRedo) {
+      drawnLines.push(lineToRedo);
     }
     canvas.dispatchEvent(new Event("drawing-changed"));
   }
