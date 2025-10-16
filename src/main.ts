@@ -47,7 +47,6 @@ canvas.addEventListener("mousedown", (e) => {
 
   //add points to array
   currentLine = [];
-  drawnLines.push(currentLine);
   currentLine.push({ x: cursor.x, y: cursor.y });
 });
 
@@ -72,7 +71,8 @@ canvas.addEventListener("drawing-changed", () => {
   const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawnLines.forEach(line => {
+  // Draw all completed lines
+  drawnLines.forEach((line) => {
     if (line.length < 2) return;
     ctx.beginPath();
     ctx.moveTo(line[0]!.x, line[0]!.y);
@@ -81,6 +81,16 @@ canvas.addEventListener("drawing-changed", () => {
     }
     ctx.stroke();
   });
+
+  // Draw current (in-progress) line, if exists
+  if (currentLine && currentLine.length >= 2) {
+    ctx.beginPath();
+    ctx.moveTo(currentLine[0]!.x, currentLine[0]!.y);
+    for (let i = 1; i < currentLine.length; i++) {
+      ctx.lineTo(currentLine[i]!.x, currentLine[i]!.y);
+    }
+    ctx.stroke();
+  }
 });
 
 clearButton?.addEventListener("click", () => {
