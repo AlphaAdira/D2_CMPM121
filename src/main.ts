@@ -16,6 +16,14 @@ const clearButton = document.createElement("button");
 clearButton.innerHTML = "clear";
 document.body.append(clearButton);
 
+const undoButton = document.createElement("button");
+undoButton.innerHTML = "undo";
+document.body.append(undoButton);
+
+const redoButton = document.createElement("button");
+redoButton.innerHTML = "redo";
+document.body.append(redoButton);
+
 const ctx = canvas.getContext("2d");
 if (!ctx) {
   throw new Error("commit plz");
