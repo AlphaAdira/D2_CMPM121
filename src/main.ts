@@ -62,7 +62,7 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("mouseup", () => {
   if (currentLine && currentLine.length > 0) {
     drawnLines.push(currentLine);
-    canvas.dispatchEvent(new Event("drawing-changed"));
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
   currentLine = null;
   cursor.active = false;
@@ -97,25 +97,25 @@ canvas.addEventListener("drawing-changed", () => {
 clearButton?.addEventListener("click", () => {
   drawnLines = [];
   undoneLines = [];
-  canvas.dispatchEvent(new Event("drawing-changed"));
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
 undoButton?.addEventListener("click", () => {
   if (drawnLines.length > 0) {
-    const lastLine = drawnLines.pop()!;
-    if (!lastLine) {
-      undoneLines!.push(lastLine);
+    const lastLine = drawnLines.pop();
+    if (lastLine) {
+      undoneLines.push(lastLine);
     }
-    canvas.dispatchEvent(new Event("drawing-changed"));
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
 
 redoButton?.addEventListener("click", () => {
   if (undoneLines && undoneLines.length > 0) {
-    const lineToRedo = undoneLines.pop()!;
+    const lineToRedo = undoneLines.pop();
     if (lineToRedo) {
       drawnLines.push(lineToRedo);
     }
-    canvas.dispatchEvent(new Event("drawing-changed"));
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
