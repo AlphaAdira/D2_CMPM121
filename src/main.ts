@@ -36,7 +36,7 @@ createButton("undo", () => {
   if (drawnLines.length > 0) {
     const last = drawnLines.pop();
     if (last) undoneLines.push(last);
-  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
 
@@ -44,7 +44,7 @@ createButton("redo", () => {
   if (undoneLines.length > 0) {
     const line = undoneLines.pop();
     if (line) drawnLines.push(line);
-  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
 
@@ -78,13 +78,10 @@ let undoneLines: Point[][] = [];
 
 canvas.addEventListener("mousedown", (e) => {
   cursor.active = true;
-  cursor.x = e.offsetX;
-  cursor.y = e.offsetY;
 
   //add points to array
-  currentLine = [];
+  currentLine = [{ x: e.offsetX, y: e.offsetY }];
   undoneLines = [];
-  currentLine.push({ x: cursor.x, y: cursor.y });
 });
 
 canvas.addEventListener("mousemove", (e) => {
