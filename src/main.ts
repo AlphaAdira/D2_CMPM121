@@ -10,43 +10,60 @@ canvas.width = 256;
 canvas.height = 256;
 document.body.append(canvas);
 
-document.body.append(document.createElement("br"));
-//buttons go better below canvas
-
-const clearButton = document.createElement("button");
-clearButton.innerHTML = "clear";
-document.body.append(clearButton);
-
-const undoButton = document.createElement("button");
-undoButton.innerHTML = "undo";
-document.body.append(undoButton);
-
-const redoButton = document.createElement("button");
-redoButton.innerHTML = "redo";
-document.body.append(redoButton);
-
-document.body.append(document.createElement("br"));
-//brushes go below buttons
-
-const thinButton = document.createElement("button");
-thinButton.innerHTML = "thin";
-document.body.append(thinButton);
-
-const thickButton = document.createElement("button");
-thickButton.innerHTML = "thick";
-document.body.append(thickButton);
-
-document.body.append(document.createElement("br"));
-//stamps go below brushes
-
-const stickerButton = document.createElement("button");
-stickerButton.innerHTML = "🦇";
-document.body.append(stickerButton);
-
 const ctx = canvas.getContext("2d");
 if (!ctx) {
   throw new Error("commit plz");
 }
+
+document.body.append(document.createElement("br"));
+//buttons go better below canvas
+
+function createButton(label: string, clickHandler: () => void) {
+  const button = document.createElement("button");
+  button.innerText = label;
+  button.addEventListener("click", clickHandler);
+  document.body.appendChild(button);
+  return button;
+}
+
+createButton("clear", () => {
+  drawnLines = [];
+  undoneLines = [];
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+});
+
+createButton("undo", () => {
+  if (drawnLines.length > 0) {
+    const last = drawnLines.pop();
+    if (last) undoneLines.push(last);
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+  }
+});
+
+createButton("redo", () => {
+  if (undoneLines.length > 0) {
+    const line = undoneLines.pop();
+    if (line) drawnLines.push(line);
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+  }
+});
+
+document.body.append(document.createElement("br"));
+//brushes go below buttons
+/*
+createButton("thin", () => {
+  ctx.lineWidth = 1;
+});
+
+createButton("thick", () => {
+  ctx.lineWidth = 5;
+});
+document.body.append(document.createElement("br"));
+//stamps go below brushes
+createButton("🦇", () => {
+  //stamp functionality to be added
+});
+*/
 
 const cursor = { active: false, x: 0, y: 0 };
 
@@ -110,31 +127,5 @@ canvas.addEventListener("drawing-changed", () => {
       ctx.lineTo(currentLine[i]!.x, currentLine[i]!.y);
     }
     ctx.stroke();
-  }
-});
-
-clearButton?.addEventListener("click", () => {
-  drawnLines = [];
-  undoneLines = [];
-  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
-});
-
-undoButton?.addEventListener("click", () => {
-  if (drawnLines.length > 0) {
-    const lastLine = drawnLines.pop();
-    if (lastLine) {
-      undoneLines.push(lastLine);
-    }
-    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
-  }
-});
-
-redoButton?.addEventListener("click", () => {
-  if (undoneLines && undoneLines.length > 0) {
-    const lineToRedo = undoneLines.pop();
-    if (lineToRedo) {
-      drawnLines.push(lineToRedo);
-    }
-    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
