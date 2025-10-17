@@ -11,6 +11,7 @@ canvas.height = 256;
 document.body.append(canvas);
 
 document.body.append(document.createElement("br"));
+//buttons go better below canvas
 
 const clearButton = document.createElement("button");
 clearButton.innerHTML = "clear";
@@ -23,6 +24,24 @@ document.body.append(undoButton);
 const redoButton = document.createElement("button");
 redoButton.innerHTML = "redo";
 document.body.append(redoButton);
+
+document.body.append(document.createElement("br"));
+//brushes go below buttons
+
+const thinButton = document.createElement("button");
+thinButton.innerHTML = "thin";
+document.body.append(thinButton);
+
+const thickButton = document.createElement("button");
+thickButton.innerHTML = "thick";
+document.body.append(thickButton);
+
+document.body.append(document.createElement("br"));
+//stamps go below brushes
+
+const stickerButton = document.createElement("button");
+stickerButton.innerHTML = "🦇";
+document.body.append(stickerButton);
 
 const ctx = canvas.getContext("2d");
 if (!ctx) {
