@@ -38,23 +38,38 @@ createButton("clear", () => {
   drawnLines = [];
   undoneLines = [];
   stickers = [];
+  undoneStickers = [];
   canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
 createButton("undo", () => {
   if (drawnLines.length > 0) {
-    const last = drawnLines.pop();
-    if (last) undoneLines.push(last);
-    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+    const lastLine = drawnLines.pop();
+    if (lastLine) undoneLines.push(lastLine);
   }
+
+  // ✅ Undo last sticker
+  if (stickers.length > 0) {
+    const lastSticker = stickers.pop();
+    if (lastSticker) undoneStickers.push(lastSticker);
+  }
+
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
 createButton("redo", () => {
   if (undoneLines.length > 0) {
-    const line = undoneLines.pop();
-    if (line) drawnLines.push(line);
-    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+    const line = undoneLines.pop()!;
+    drawnLines.push(line);
   }
+
+  // ✅ Redo last sticker
+  if (undoneStickers.length > 0) {
+    const sticker = undoneStickers.pop()!;
+    stickers.push(sticker);
+  }
+
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
 document.body.append(document.createElement("br"));
@@ -96,7 +111,6 @@ interface Sticker {
   y: number;
   url: string; // path to the image
 }
-let stickers: Sticker[] = [];
 const bat_url = batImage;
 const blood_url = bloodImage;
 let currentSticker = bat_url;
@@ -139,6 +153,8 @@ interface Line {
 let drawnLines: Line[] = [];
 let currentLine: Point[] | null = null;
 let undoneLines: Line[] = [];
+let stickers: Sticker[] = [];
+let undoneStickers: Sticker[] = [];
 
 canvas.addEventListener("click", (e) => {
   if (toolMode === "sticker") {
@@ -149,6 +165,7 @@ canvas.addEventListener("click", (e) => {
       url: currentSticker,
     });
     // Redraw to show it
+    undoneStickers = [];
     canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
