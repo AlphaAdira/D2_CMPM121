@@ -36,35 +36,37 @@ function createButton(label: string, clickHandler: () => void) {
 
 createButton("clear", () => {
   drawnLines = [];
-  undoneLines = [];
   stickers = [];
-  undoneStickers = [];
+  undoStack = [];
+  redoStack = [];
   canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
 createButton("undo", () => {
-  if (drawnLines.length > 0) {
-    const lastLine = drawnLines.pop();
-    if (lastLine) undoneLines.push(lastLine);
-  }
+  if (undoStack.length > 0) {
+    const lastAction = undoStack.pop()!;
+    redoStack.push(lastAction);
 
-  if (stickers.length > 0) {
-    const lastSticker = stickers.pop();
-    if (lastSticker) undoneStickers.push(lastSticker);
+    // Remove from the appropriate list
+    if (lastAction.type === "line") {
+      drawnLines.pop();
+    } else if (lastAction.type === "sticker") {
+      stickers.pop();
+    }
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
-
-  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
 createButton("redo", () => {
-  if (undoneLines.length > 0) {
-    const line = undoneLines.pop()!;
-    drawnLines.push(line);
-  }
+  if (redoStack.length === 0) return;
 
-  if (undoneStickers.length > 0) {
-    const sticker = undoneStickers.pop()!;
-    stickers.push(sticker);
+  const action = redoStack.pop()!;
+  undoStack.push(action);
+
+  if (action.type === "line") {
+    drawnLines.push(action.line);
+  } else if (action.type === "sticker") {
+    stickers.push(action.sticker);
   }
 
   canvas.dispatchEvent(new CustomEvent("drawing-changed"));
@@ -148,22 +150,35 @@ interface Line {
   width: number;
   color: string;
 }
+type Action =
+  | { type: "line"; line: Line }
+  | { type: "sticker"; sticker: Sticker };
+
+let undoStack: Action[] = [];
+let redoStack: Action[] = [];
 let drawnLines: Line[] = [];
 let currentLine: Point[] | null = null;
-let undoneLines: Line[] = [];
 let stickers: Sticker[] = [];
-let undoneStickers: Sticker[] = [];
 
 canvas.addEventListener("click", (e) => {
   if (toolMode === "sticker") {
-    // Add a new sticker at the click position
-    stickers.push({
+    // Create the sticker first
+    const newSticker: Sticker = {
       x: e.offsetX,
       y: e.offsetY,
       url: currentSticker,
+    };
+
+    // Add to drawing
+    stickers.push(newSticker);
+
+    // Add to undo stack — now TS knows newSticker is valid ✅
+    undoStack.push({
+      type: "sticker",
+      sticker: newSticker,
     });
-    // Redraw to show it
-    undoneStickers = [];
+
+    redoStack = []; // Clear redo stack on new action
     canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
@@ -177,7 +192,7 @@ canvas.addEventListener("mousedown", (e) => {
 
   //add points to array
   currentLine = [{ x: e.offsetX, y: e.offsetY }];
-  undoneLines = [];
+  redoStack = [];
 });
 
 let currentPreview: ToolPreview | null = null;
@@ -209,11 +224,14 @@ canvas.addEventListener("mouseleave", () => {
 
 function endOfLine() {
   if (currentLine && currentLine.length > 0) {
-    drawnLines.push({
+    const newLine = {
       points: currentLine,
       width: currentStyle.width,
       color: currentStyle.color,
-    });
+    };
+    drawnLines.push(newLine);
+    undoStack.push({ type: "line", line: newLine });
+    redoStack = [];
   }
   currentLine = null;
   canvas.dispatchEvent(new CustomEvent("drawing-changed"));
