@@ -7,6 +7,9 @@ canvas {
   border: 1px solid #000000;
   border-radius: 10px;
 }
+canvas:hover {
+  cursor: none;
+}
 .selected {
   background-color: #aaa;
   border: 3px solid black;
