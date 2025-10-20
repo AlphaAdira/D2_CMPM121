@@ -1,4 +1,4 @@
-import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
+//import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
 import "./style.css";
 
 document.body.innerHTML = `
@@ -62,6 +62,7 @@ let toolMode: ToolMode = "draw"; // default tool
 
 const thinBtn = createButton("thin + red", () => {
   toolMode = "draw";
+  console.log(toolMode);
   currentStyle.width = 1;
   currentStyle.color = "#f00";
   removeSelections();
@@ -70,6 +71,7 @@ const thinBtn = createButton("thin + red", () => {
 
 const thickBtn = createButton("thick + blue", () => {
   toolMode = "draw";
+  console.log(toolMode);
   currentStyle.width = 3;
   currentStyle.color = "#00f";
   removeSelections();
@@ -78,6 +80,7 @@ const thickBtn = createButton("thick + blue", () => {
 
 const eraserBtn = createButton("eraser", () => {
   toolMode = "draw";
+  console.log(toolMode);
   currentStyle.width = 5;
   currentStyle.color = "#fff";
   removeSelections();
@@ -96,6 +99,7 @@ interface Sticker {
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
+  console.log(toolMode);
   removeSelections();
   batSticker.classList.add("selected");
 });
