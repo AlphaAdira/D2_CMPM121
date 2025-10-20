@@ -48,7 +48,6 @@ createButton("undo", () => {
     if (lastLine) undoneLines.push(lastLine);
   }
 
-  // ✅ Undo last sticker
   if (stickers.length > 0) {
     const lastSticker = stickers.pop();
     if (lastSticker) undoneStickers.push(lastSticker);
@@ -63,7 +62,6 @@ createButton("redo", () => {
     drawnLines.push(line);
   }
 
-  // ✅ Redo last sticker
   if (undoneStickers.length > 0) {
     const sticker = undoneStickers.pop()!;
     stickers.push(sticker);
