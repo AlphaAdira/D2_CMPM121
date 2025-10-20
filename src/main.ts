@@ -1,4 +1,5 @@
 import batImage from "./bat.png";
+import bloodImage from "./blood.webp";
 import "./style.css";
 
 document.body.innerHTML = `
@@ -96,17 +97,29 @@ interface Sticker {
   url: string; // path to the image
 }
 let stickers: Sticker[] = [];
-const STICKER_URL = batImage;
+const bat_url = batImage;
+const blood_url = bloodImage;
+let currentSticker = bat_url;
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
+  currentSticker = bat_url;
   console.log(toolMode);
   removeSelections();
   batSticker.classList.add("selected");
 });
 
+const bloodSticker = createButton("🩸", () => {
+  toolMode = "sticker";
+  currentSticker = blood_url;
+  console.log(toolMode);
+  removeSelections();
+  bloodSticker.classList.add("selected");
+});
+
 function removeSelections() {
   batSticker.classList.remove("selected");
+  bloodSticker.classList.remove("selected");
   thinBtn.classList.remove("selected");
   thickBtn.classList.remove("selected");
   eraserBtn.classList.remove("selected");
@@ -133,7 +146,7 @@ canvas.addEventListener("click", (e) => {
     stickers.push({
       x: e.offsetX,
       y: e.offsetY,
-      url: STICKER_URL,
+      url: currentSticker,
     });
     // Redraw to show it
     canvas.dispatchEvent(new CustomEvent("drawing-changed"));
