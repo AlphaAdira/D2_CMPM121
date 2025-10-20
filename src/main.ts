@@ -1,4 +1,4 @@
-import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
+import batImage from "./bat.png";
 import "./style.css";
 
 document.body.innerHTML = `
@@ -96,7 +96,7 @@ interface Sticker {
   url: string; // path to the image
 }
 let stickers: Sticker[] = [];
-const STICKER_URL = exampleIconUrl;
+const STICKER_URL = batImage;
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
