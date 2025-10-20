@@ -15,6 +15,11 @@ if (!ctx) {
   throw new Error("ctx is null");
 }
 
+const currentStyle = {
+  width: 1,
+  color: "#f00"
+};
+
 document.body.append(document.createElement("br"));
 //buttons go better below canvas
 
@@ -50,14 +55,16 @@ createButton("redo", () => {
 
 document.body.append(document.createElement("br"));
 //brushes go below buttons
-/*
 createButton("thin", () => {
-  ctx.lineWidth = 1;
+  currentStyle.width = 1;
+  currentStyle.color = "#f00";
 });
 
 createButton("thick", () => {
-  ctx.lineWidth = 5;
+  currentStyle.width = 5;
+  currentStyle.color = "#00f";
 });
+/*
 document.body.append(document.createElement("br"));
 //stamps go below brushes
 createButton("🦇", () => {
@@ -78,6 +85,8 @@ let undoneLines: Point[][] = [];
 
 canvas.addEventListener("mousedown", (e) => {
   cursor.active = true;
+  ctx.lineWidth = currentStyle.width;
+  ctx.strokeStyle = currentStyle.color;
 
   //add points to array
   currentLine = [{ x: e.offsetX, y: e.offsetY }];
