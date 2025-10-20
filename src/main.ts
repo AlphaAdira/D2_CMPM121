@@ -114,10 +114,20 @@ canvas.addEventListener("mousedown", (e) => {
   undoneLines = [];
 });
 
+let currentPreview: ToolPreview | null = null;
 canvas.addEventListener("mousemove", (e) => {
   if (cursor.active && currentLine) {
-    //add points to array
+    // Drawing mode: add to line
     currentLine.push({ x: e.offsetX, y: e.offsetY });
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+  } else {
+    // Hover mode: update preview
+    currentPreview = makeCirclePreview(
+      e.offsetX,
+      e.offsetY,
+      currentStyle.width,
+      currentStyle.color
+    );
     canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
@@ -140,14 +150,13 @@ function redraw() {
   if (!ctx) {
     throw new Error("ctx is null");
   }
+  // Draw all lines (existing code)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw all recorded lines with their original style
-  drawnLines.forEach((line) => {
-    if (line.points.length < 2) return;
-
+  drawnLines.forEach(line => {
     ctx.lineWidth = line.width;
     ctx.strokeStyle = line.color;
+    if (line.points.length < 2) return;
     ctx.beginPath();
     ctx.moveTo(line.points[0]!.x, line.points[0]!.y);
     for (let i = 1; i < line.points.length; i++) {
@@ -156,7 +165,7 @@ function redraw() {
     ctx.stroke();
   });
 
-  // Draw current preview line with current style
+  // Draw current line (if in progress)
   if (currentLine && currentLine.length >= 2) {
     ctx.lineWidth = currentStyle.width;
     ctx.strokeStyle = currentStyle.color;
@@ -167,5 +176,32 @@ function redraw() {
     }
     ctx.stroke();
   }
+
+  // ✅ Draw tool preview (only if not drawing)
+  if (!cursor.active && currentPreview) {
+    currentPreview.draw(ctx);
+  }
 }
 
+interface ToolPreview {
+  draw(ctx: CanvasRenderingContext2D): void;
+}
+function makeCirclePreview(
+  x: number,
+  y: number,
+  radius: number,
+  color: string,
+): ToolPreview {
+  return {
+    draw(ctx: CanvasRenderingContext2D) {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      if (color != "#fff") {
+        ctx.fillStyle = color;
+      } else {
+        ctx.fillStyle = "#ccc"; // make eraser visible on white bg
+      }
+      ctx.fill();
+    },
+  };
+}
