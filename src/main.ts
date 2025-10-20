@@ -17,7 +17,7 @@ if (!ctx) {
 
 const currentStyle = {
   width: 1,
-  color: "#f00"
+  color: "#f00",
 };
 
 document.body.append(document.createElement("br"));
@@ -78,10 +78,14 @@ interface Point {
   x: number;
   y: number;
 }
-
-let drawnLines: Point[][] = [];
+interface Line {
+  points: Point[];
+  width: number;
+  color: string;
+}
+let drawnLines: Line[] = [];
 let currentLine: Point[] | null = null;
-let undoneLines: Point[][] = [];
+let undoneLines: Line[] = [];
 
 canvas.addEventListener("mousedown", (e) => {
   cursor.active = true;
@@ -103,10 +107,14 @@ canvas.addEventListener("mousemove", (e) => {
 
 canvas.addEventListener("mouseup", () => {
   if (currentLine && currentLine.length > 0) {
-    drawnLines.push(currentLine);
-    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+    drawnLines.push({
+      points: currentLine,
+      width: currentStyle.width,
+      color: currentStyle.color,
+    });
   }
   currentLine = null;
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   cursor.active = false;
 });
 
@@ -117,19 +125,24 @@ function redraw() {
   }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw all completed lines
+  // Draw all recorded lines with their original style
   drawnLines.forEach((line) => {
-    if (line.length < 2) return;
+    if (line.points.length < 2) return;
+
+    ctx.lineWidth = line.width;
+    ctx.strokeStyle = line.color;
     ctx.beginPath();
-    ctx.moveTo(line[0]!.x, line[0]!.y);
-    for (let i = 1; i < line.length; i++) {
-      ctx.lineTo(line[i]!.x, line[i]!.y);
+    ctx.moveTo(line.points[0]!.x, line.points[0]!.y);
+    for (let i = 1; i < line.points.length; i++) {
+      ctx.lineTo(line.points[i]!.x, line.points[i]!.y);
     }
     ctx.stroke();
   });
 
-  // Draw current (in-progress) line, if exists
+  // Draw current preview line with current style
   if (currentLine && currentLine.length >= 2) {
+    ctx.lineWidth = currentStyle.width;
+    ctx.strokeStyle = currentStyle.color;
     ctx.beginPath();
     ctx.moveTo(currentLine[0]!.x, currentLine[0]!.y);
     for (let i = 1; i < currentLine.length; i++) {
