@@ -12,7 +12,7 @@ document.body.append(canvas);
 
 const ctx = canvas.getContext("2d");
 if (!ctx) {
-  throw new Error("commit plz");
+  throw new Error("ctx is null");
 }
 
 document.body.append(document.createElement("br"));
@@ -101,7 +101,11 @@ canvas.addEventListener("mouseup", () => {
   cursor.active = false;
 });
 
-canvas.addEventListener("drawing-changed", () => {
+canvas.addEventListener("drawing-changed", redraw);
+function redraw() {
+  if (!ctx) {
+    throw new Error("ctx is null");
+  }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw all completed lines
@@ -124,4 +128,4 @@ canvas.addEventListener("drawing-changed", () => {
     }
     ctx.stroke();
   }
-});
+}
