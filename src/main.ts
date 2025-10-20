@@ -1,4 +1,4 @@
-//import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
+import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
 import "./style.css";
 
 document.body.innerHTML = `
@@ -36,6 +36,7 @@ function createButton(label: string, clickHandler: () => void) {
 createButton("clear", () => {
   drawnLines = [];
   undoneLines = [];
+  stickers = [];
   canvas.dispatchEvent(new CustomEvent("drawing-changed"));
 });
 
@@ -89,13 +90,13 @@ const eraserBtn = createButton("eraser", () => {
 
 document.body.append(document.createElement("br"));
 //stamps go below brushes
-/*
 interface Sticker {
   x: number;
   y: number;
-  url: string;  // path to the image
+  url: string; // path to the image
 }
-  */
+let stickers: Sticker[] = [];
+const STICKER_URL = exampleIconUrl;
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
@@ -126,8 +127,23 @@ let drawnLines: Line[] = [];
 let currentLine: Point[] | null = null;
 let undoneLines: Line[] = [];
 
+canvas.addEventListener("click", (e) => {
+  if (toolMode === "sticker") {
+    // Add a new sticker at the click position
+    stickers.push({
+      x: e.offsetX,
+      y: e.offsetY,
+      url: STICKER_URL,
+    });
+    // Redraw to show it
+    canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+  }
+});
+
 canvas.addEventListener("mousedown", (e) => {
-  cursor.active = true;
+  if (toolMode == "draw") {
+    cursor.active = true;
+  }
   ctx.lineWidth = currentStyle.width;
   ctx.strokeStyle = currentStyle.color;
 
@@ -208,7 +224,22 @@ function redraw() {
     ctx.stroke();
   }
 
-  // ✅ Draw tool preview (only if not drawing)
+  // Draw all stickers
+  stickers.forEach((sticker) => {
+    const img = new Image();
+    img.src = sticker.url;
+    // Optional: set size
+    const size = 32;
+    ctx.drawImage(
+      img,
+      sticker.x - size / 2,
+      sticker.y - size / 2,
+      size,
+      size,
+    );
+  });
+
+  // Draw tool preview (only if not drawing)
   if (!cursor.active && currentPreview) {
     currentPreview.draw(ctx);
   }
