@@ -126,13 +126,27 @@ canvas.addEventListener("mousemove", (e) => {
       e.offsetX,
       e.offsetY,
       currentStyle.width,
-      currentStyle.color
+      currentStyle.color,
     );
     canvas.dispatchEvent(new CustomEvent("drawing-changed"));
   }
 });
 
 canvas.addEventListener("mouseup", () => {
+  if (currentLine && currentLine.length > 0) {
+    drawnLines.push({
+      points: currentLine,
+      width: currentStyle.width,
+      color: currentStyle.color,
+    });
+  }
+  currentLine = null;
+  canvas.dispatchEvent(new CustomEvent("drawing-changed"));
+  cursor.active = false;
+});
+
+canvas.addEventListener("mouseleave", () => {
+  currentPreview = null;
   if (currentLine && currentLine.length > 0) {
     drawnLines.push({
       points: currentLine,
@@ -153,7 +167,7 @@ function redraw() {
   // Draw all lines (existing code)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawnLines.forEach(line => {
+  drawnLines.forEach((line) => {
     ctx.lineWidth = line.width;
     ctx.strokeStyle = line.color;
     if (line.points.length < 2) return;
