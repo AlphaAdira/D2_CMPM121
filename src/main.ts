@@ -16,8 +16,8 @@ if (!ctx) {
 }
 
 const currentStyle = {
-  width: 1,
-  color: "#f00",
+  width: 3,
+  color: "#fff",
 };
 
 document.body.append(document.createElement("br"));
@@ -55,14 +55,29 @@ createButton("redo", () => {
 
 document.body.append(document.createElement("br"));
 //brushes go below buttons
-createButton("thin", () => {
+
+const thinBtn = createButton("thin + red", () => {
   currentStyle.width = 1;
   currentStyle.color = "#f00";
+  thickBtn.classList.remove("selected");
+  thinBtn.classList.add("selected");
+  eraserBtn.classList.remove("selected");
 });
 
-createButton("thick", () => {
+const thickBtn = createButton("thick + blue", () => {
   currentStyle.width = 5;
   currentStyle.color = "#00f";
+  thinBtn.classList.remove("selected");
+  thickBtn.classList.add("selected");
+  eraserBtn.classList.remove("selected");
+});
+
+const eraserBtn = createButton("medium eraser", () => {
+  currentStyle.width = 3;
+  currentStyle.color = "#fff";
+  thinBtn.classList.remove("selected");
+  thickBtn.classList.remove("selected");
+  eraserBtn.classList.add("selected");
 });
 /*
 document.body.append(document.createElement("br"));
