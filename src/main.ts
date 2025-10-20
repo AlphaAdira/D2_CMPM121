@@ -102,7 +102,6 @@ canvas.addEventListener("mouseup", () => {
 });
 
 canvas.addEventListener("drawing-changed", () => {
-  const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw all completed lines
