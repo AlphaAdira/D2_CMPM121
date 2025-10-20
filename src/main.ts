@@ -1,4 +1,4 @@
-//import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
+import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
 import "./style.css";
 
 document.body.innerHTML = `
@@ -57,37 +57,55 @@ createButton("redo", () => {
 
 document.body.append(document.createElement("br"));
 //brushes go below buttons
+type ToolMode = "draw" | "sticker";
+let toolMode: ToolMode = "draw"; // default tool
 
 const thinBtn = createButton("thin + red", () => {
+  toolMode = "draw";
   currentStyle.width = 1;
   currentStyle.color = "#f00";
-  thickBtn.classList.remove("selected");
+  removeSelections();
   thinBtn.classList.add("selected");
-  eraserBtn.classList.remove("selected");
 });
 
 const thickBtn = createButton("thick + blue", () => {
+  toolMode = "draw";
   currentStyle.width = 3;
   currentStyle.color = "#00f";
-  thinBtn.classList.remove("selected");
+  removeSelections();
   thickBtn.classList.add("selected");
-  eraserBtn.classList.remove("selected");
 });
 
 const eraserBtn = createButton("eraser", () => {
+  toolMode = "draw";
   currentStyle.width = 5;
   currentStyle.color = "#fff";
-  thinBtn.classList.remove("selected");
-  thickBtn.classList.remove("selected");
+  removeSelections();
   eraserBtn.classList.add("selected");
 });
-/*
+
 document.body.append(document.createElement("br"));
 //stamps go below brushes
-createButton("🦇", () => {
-  //stamp functionality to be added
+/*
+interface Sticker {
+  x: number;
+  y: number;
+  url: string;  // path to the image
+}
+  */
+
+const batSticker = createButton("🦇", () => {
+  toolMode = "sticker";
+  removeSelections();
+  batSticker.classList.add("selected");
 });
-*/
+
+function removeSelections() {
+  batSticker.classList.remove("selected");
+  thinBtn.classList.remove("selected");
+  thickBtn.classList.remove("selected");
+  eraserBtn.classList.remove("selected");
+}
 
 const cursor = { active: false, x: 0, y: 0 };
 
