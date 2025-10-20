@@ -5,9 +5,11 @@ document.body.innerHTML = `
   <h1>[App Title]</h1>
 `;
 
+const canvasSize = 256;
+
 const canvas = document.createElement("canvas");
-canvas.width = 256;
-canvas.height = 256;
+canvas.width = canvasSize;
+canvas.height = canvasSize;
 document.body.append(canvas);
 
 const ctx = canvas.getContext("2d");
@@ -65,15 +67,15 @@ const thinBtn = createButton("thin + red", () => {
 });
 
 const thickBtn = createButton("thick + blue", () => {
-  currentStyle.width = 5;
+  currentStyle.width = 3;
   currentStyle.color = "#00f";
   thinBtn.classList.remove("selected");
   thickBtn.classList.add("selected");
   eraserBtn.classList.remove("selected");
 });
 
-const eraserBtn = createButton("medium eraser", () => {
-  currentStyle.width = 3;
+const eraserBtn = createButton("eraser", () => {
+  currentStyle.width = 5;
   currentStyle.color = "#fff";
   thinBtn.classList.remove("selected");
   thickBtn.classList.remove("selected");
