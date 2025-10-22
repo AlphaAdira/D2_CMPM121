@@ -80,7 +80,6 @@ let toolMode: ToolMode = "draw"; // default tool
 
 const thinBtn = createButton("thin + red", () => {
   toolMode = "draw";
-  console.log(toolMode);
   currentStyle.width = 1;
   currentStyle.color = "#f00";
   removeSelections();
@@ -89,7 +88,6 @@ const thinBtn = createButton("thin + red", () => {
 
 const thickBtn = createButton("thick + blue", () => {
   toolMode = "draw";
-  console.log(toolMode);
   currentStyle.width = 3;
   currentStyle.color = "#00f";
   removeSelections();
@@ -98,7 +96,6 @@ const thickBtn = createButton("thick + blue", () => {
 
 const eraserBtn = createButton("eraser", () => {
   toolMode = "draw";
-  console.log(toolMode);
   currentStyle.width = 5;
   currentStyle.color = "#fff";
   removeSelections();
@@ -158,7 +155,6 @@ document.body.appendChild(uploadBtn);
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
   currentSticker = batImage;
-  console.log(toolMode);
   removeSelections();
   batSticker.classList.add("selected");
 });
@@ -166,7 +162,6 @@ const batSticker = createButton("🦇", () => {
 const bloodSticker = createButton("🩸", () => {
   toolMode = "sticker";
   currentSticker = bloodImage;
-  console.log(toolMode);
   removeSelections();
   bloodSticker.classList.add("selected");
 });
