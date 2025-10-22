@@ -24,7 +24,7 @@ const currentStyle = {
 };
 
 document.body.append(document.createElement("br"));
-//buttons go better below canvas
+// buttons go better below canvas
 
 function createButton(label: string, clickHandler: () => void) {
   const button = document.createElement("button");
@@ -73,7 +73,7 @@ createButton("redo", () => {
 });
 
 document.body.append(document.createElement("br"));
-//brushes go below buttons
+// brushes go below buttons
 
 type ToolMode = "draw" | "sticker";
 let toolMode: ToolMode = "draw"; // default tool
@@ -106,12 +106,12 @@ const eraserBtn = createButton("eraser", () => {
 });
 
 document.body.append(document.createElement("br"));
-//stamps go below brushes
+// stamps go below brushes
 
 interface Sticker {
   x: number;
   y: number;
-  url: string; // path to the image
+  url: string;
 }
 let currentSticker = batImage;
 
