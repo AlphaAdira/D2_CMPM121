@@ -1,3 +1,4 @@
 # CMPM 121 D2 Project
 
-This is the starting point for your CMPM 121 D2 project. Students should make sure to remove _this_ content from their README.md file and replace it with their own project documentation.
+I, Adira Rana, Have created a drawing program
+I recommend not using the upload sticker button on a projector if you have private files
