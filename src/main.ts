@@ -115,7 +115,8 @@ interface Sticker {
 }
 let currentSticker = batImage;
 
-/////////// CUSTOM STICKER CODE ///////////////
+/////////// CUSTOM STICKER CODE //////////////
+// TODO: clean the code brace helped me with (stuff below) to fit format of rest of code
 function makeImageStickerCommand(src: string) {
   const img = new Image();
   img.src = src;
