@@ -111,13 +111,11 @@ interface Sticker {
   y: number;
   url: string; // path to the image
 }
-const bat_url = batImage;
-const blood_url = bloodImage;
-let currentSticker = bat_url;
+let currentSticker = batImage;
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
-  currentSticker = bat_url;
+  currentSticker = batImage;
   console.log(toolMode);
   removeSelections();
   batSticker.classList.add("selected");
@@ -125,7 +123,7 @@ const batSticker = createButton("🦇", () => {
 
 const bloodSticker = createButton("🩸", () => {
   toolMode = "sticker";
-  currentSticker = blood_url;
+  currentSticker = bloodImage;
   console.log(toolMode);
   removeSelections();
   bloodSticker.classList.add("selected");
