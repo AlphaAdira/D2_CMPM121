@@ -74,6 +74,7 @@ createButton("redo", () => {
 
 document.body.append(document.createElement("br"));
 //brushes go below buttons
+
 type ToolMode = "draw" | "sticker";
 let toolMode: ToolMode = "draw"; // default tool
 
@@ -106,12 +107,52 @@ const eraserBtn = createButton("eraser", () => {
 
 document.body.append(document.createElement("br"));
 //stamps go below brushes
+
 interface Sticker {
   x: number;
   y: number;
   url: string; // path to the image
 }
 let currentSticker = batImage;
+
+/////////// CUSTOM STICKER CODE ///////////////
+function makeImageStickerCommand(src: string) {
+  const img = new Image();
+  img.src = src;
+  img.onload = () => console.log("Sticker loaded:", src);
+
+  return {
+    display: (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+      const size = 40;
+      if (img.complete) {
+        ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+      }
+    },
+  };
+}
+// Hidden file input
+const fileInput = document.createElement("input");
+fileInput.type = "file";
+fileInput.accept = "image/*";
+fileInput.style.display = "none";
+fileInput.onchange = (e) => {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+
+  const url = URL.createObjectURL(file);
+  makeImageStickerCommand(url);
+  toolMode = "sticker";
+  currentSticker = url;
+};
+
+document.body.appendChild(fileInput);
+
+// Upload button
+const uploadBtn = document.createElement("button");
+uploadBtn.textContent = "🖼️ Upload Sticker";
+uploadBtn.onclick = () => fileInput.click();
+document.body.appendChild(uploadBtn);
+///////////////////////////////////////////////
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
