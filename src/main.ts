@@ -111,25 +111,7 @@ interface Sticker {
   y: number;
   url: string;
 }
-let currentSticker = batImage;
-
-/////////// CUSTOM STICKER CODE //////////////
-function createUserSticker(text: string) {
-  const userText = document.createElement("canvas");
-  userText.width = 100;
-  userText.height = 40;
-  const UserSticker = userText.getContext("2d");
-  if (!UserSticker) {
-    throw new Error("UserSticker is null");
-  }
-
-  UserSticker.fillStyle = "#000"; // Bright orange
-  UserSticker.font = 'bold 15px "Press Start 2P", cursive, sans-serif';
-  UserSticker.textAlign = "center";
-  UserSticker.fillText(text, userText.width / 2, userText.height / 1.5);
-  return userText.toDataURL("image/png");
-}
-///////////////////////////////////////////////
+let currentSticker = batImage
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
@@ -145,6 +127,21 @@ const bloodSticker = createButton("🩸", () => {
   bloodSticker.classList.add("selected");
 });
 
+function createUserSticker(text: string) {
+  const userText = document.createElement("canvas");
+  userText.width = 100;
+  userText.height = 40;
+  const UserSticker = userText.getContext("2d");
+  if (!UserSticker) {
+    throw new Error("UserSticker is null");
+  }
+
+  UserSticker.fillStyle = "#000"; // Bright orange
+  UserSticker.font = 'bold 15px "Press Start 2P", cursive, sans-serif';
+  UserSticker.textAlign = "center";
+  UserSticker.fillText(text, userText.width / 2, userText.height / 1.5);
+  return userText.toDataURL("image/png");
+}
 const userSticker = createButton("custom text button", () => {
   toolMode = "sticker";
   const text = prompt("Enter text for your custom sticker:", "Hello!");
