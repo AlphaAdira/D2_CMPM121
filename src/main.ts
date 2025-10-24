@@ -9,6 +9,7 @@ document.body.innerHTML = `
 const canvasSize = 256;
 
 const canvas = document.createElement("canvas");
+canvas.id = "drawingCanvas";
 canvas.width = canvasSize;
 canvas.height = canvasSize;
 document.body.append(canvas);
@@ -113,43 +114,21 @@ interface Sticker {
 let currentSticker = batImage;
 
 /////////// CUSTOM STICKER CODE //////////////
-// TODO: clean the code brace helped me with (stuff below) to fit format of rest of code
-function makeImageStickerCommand(src: string) {
-  const img = new Image();
-  img.src = src;
-  img.onload = () => console.log("Sticker loaded:", src);
+function createUserSticker(text: string) {
+  const userText = document.createElement("canvas");
+  userText.width = 100;
+  userText.height = 40;
+  const UserSticker = userText.getContext("2d");
+  if (!UserSticker) {
+    throw new Error("UserSticker is null");
+  }
 
-  return {
-    display: (ctx: CanvasRenderingContext2D, x: number, y: number) => {
-      const size = 40;
-      if (img.complete) {
-        ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
-      }
-    },
-  };
+  UserSticker.fillStyle = "#000"; // Bright orange
+  UserSticker.font = 'bold 15px "Press Start 2P", cursive, sans-serif';
+  UserSticker.textAlign = "center";
+  UserSticker.fillText(text, userText.width / 2, userText.height / 1.5);
+  return userText.toDataURL("image/png");
 }
-// Hidden file input
-const fileInput = document.createElement("input");
-fileInput.type = "file";
-fileInput.accept = "image/*";
-fileInput.style.display = "none";
-fileInput.onchange = (e) => {
-  const file = (e.target as HTMLInputElement).files?.[0];
-  if (!file) return;
-
-  const url = URL.createObjectURL(file);
-  makeImageStickerCommand(url);
-  toolMode = "sticker";
-  currentSticker = url;
-};
-
-document.body.appendChild(fileInput);
-
-// Upload button
-const uploadBtn = document.createElement("button");
-uploadBtn.textContent = "🖼️ Upload Sticker";
-uploadBtn.onclick = () => fileInput.click();
-document.body.appendChild(uploadBtn);
 ///////////////////////////////////////////////
 
 const batSticker = createButton("🦇", () => {
@@ -164,6 +143,17 @@ const bloodSticker = createButton("🩸", () => {
   currentSticker = bloodImage;
   removeSelections();
   bloodSticker.classList.add("selected");
+});
+
+const userSticker = createButton("custom text button", () => {
+  toolMode = "sticker";
+  const text = prompt("Enter text for your custom sticker:", "Hello!");
+  if (text) {
+    const customSticker = createUserSticker(text);
+    currentSticker = customSticker;
+  }
+  removeSelections();
+  userSticker.classList.add("selected");
 });
 
 function removeSelections() {
