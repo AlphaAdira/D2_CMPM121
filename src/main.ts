@@ -111,7 +111,7 @@ interface Sticker {
   y: number;
   url: string;
 }
-let currentSticker = batImage
+let currentSticker = batImage;
 
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
@@ -153,12 +153,25 @@ const userSticker = createButton("custom text button", () => {
   userSticker.classList.add("selected");
 });
 
+document.body.append(document.createElement("br"));
+// export button goes below stickers
+
+createButton("export", () => {
+  const dataURL = canvas.toDataURL("image/png");
+  const newTab = globalThis.open();
+  if (newTab) {
+    newTab.document.body.innerHTML =
+      `<img src="${dataURL}" alt="Exported Drawing"/>`;
+  }
+});
+
 function removeSelections() {
   batSticker.classList.remove("selected");
   bloodSticker.classList.remove("selected");
   thinBtn.classList.remove("selected");
   thickBtn.classList.remove("selected");
   eraserBtn.classList.remove("selected");
+  userSticker.classList.remove("selected");
 }
 
 const cursor = { active: false, x: 0, y: 0 };
