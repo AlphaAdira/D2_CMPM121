@@ -77,7 +77,7 @@ document.body.append(document.createElement("br"));
 // brushes go below buttons
 
 type ToolMode = "draw" | "sticker";
-let toolMode: ToolMode = "draw"; // default tool
+let toolMode: ToolMode = "draw";
 
 const thinBtn = createButton("thin + red", () => {
   toolMode = "draw";
