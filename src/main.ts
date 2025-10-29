@@ -144,18 +144,22 @@ interface Sticker {
 let currentSticker = batImage;
 
 const batSticker = createButton("🦇", () => {
+  currentStyle.color = "#fff";
   toolMode = "sticker";
   currentSticker = batImage;
   removeStickerSelections();
   removePenSelections();
+  removeColorSelections();
   batSticker.classList.add("selected");
 });
 
 const bloodSticker = createButton("🩸", () => {
+  currentStyle.color = "#fff";
   toolMode = "sticker";
   currentSticker = bloodImage;
   removeStickerSelections();
   removePenSelections();
+  removeColorSelections();
   bloodSticker.classList.add("selected");
 });
 
@@ -177,6 +181,7 @@ function createUserSticker(text: string) {
   return userText.toDataURL("image/png");
 }
 const userSticker = createButton("custom text button", () => {
+  currentStyle.color = "#fff";
   toolMode = "sticker";
   const text = prompt("Enter text for your custom sticker:", "Adira");
   if (text) {
@@ -185,6 +190,7 @@ const userSticker = createButton("custom text button", () => {
   }
   removeStickerSelections();
   removePenSelections();
+  removeColorSelections();
   userSticker.classList.add("selected");
 });
 
