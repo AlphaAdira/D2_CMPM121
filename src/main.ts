@@ -81,7 +81,7 @@ let toolMode: ToolMode = "draw"; // default tool
 
 const thinBtn = createButton("thin + red", () => {
   toolMode = "draw";
-  currentStyle.width = 1;
+  currentStyle.width = 3;
   currentStyle.color = "#f00";
   removeSelections();
   thinBtn.classList.add("selected");
@@ -89,7 +89,7 @@ const thinBtn = createButton("thin + red", () => {
 
 const thickBtn = createButton("thick + blue", () => {
   toolMode = "draw";
-  currentStyle.width = 3;
+  currentStyle.width = 30;
   currentStyle.color = "#00f";
   removeSelections();
   thickBtn.classList.add("selected");
@@ -97,7 +97,7 @@ const thickBtn = createButton("thick + blue", () => {
 
 const eraserBtn = createButton("eraser", () => {
   toolMode = "draw";
-  currentStyle.width = 5;
+  currentStyle.width = 10;
   currentStyle.color = "#fff";
   removeSelections();
   eraserBtn.classList.add("selected");
