@@ -129,14 +129,14 @@ const bloodSticker = createButton("🩸", () => {
 
 function createUserSticker(text: string) {
   const userText = document.createElement("canvas");
-  userText.width = 100;
+  userText.width = text.length * 10;
   userText.height = 40;
   const UserSticker = userText.getContext("2d");
   if (!UserSticker) {
     throw new Error("UserSticker is null");
   }
 
-  UserSticker.fillStyle = "#000"; // Bright orange
+  UserSticker.fillStyle = "#000";
   UserSticker.font = 'bold 15px "Press Start 2P", cursive, sans-serif';
   UserSticker.textAlign = "center";
   UserSticker.fillText(text, userText.width / 2, userText.height / 1.5);
@@ -144,7 +144,7 @@ function createUserSticker(text: string) {
 }
 const userSticker = createButton("custom text button", () => {
   toolMode = "sticker";
-  const text = prompt("Enter text for your custom sticker:", "Hello!");
+  const text = prompt("Enter text for your custom sticker:", "Adira");
   if (text) {
     const customSticker = createUserSticker(text);
     currentSticker = customSticker;
@@ -157,11 +157,20 @@ document.body.append(document.createElement("br"));
 // export button goes below stickers
 
 createButton("export", () => {
-  const dataURL = canvas.toDataURL("image/png");
+  const scale = 4;
+  const offscreen = document.createElement("canvas");
+  offscreen.width = canvas.width * scale;
+  offscreen.height = canvas.height * scale;
+
+  const ctx = offscreen.getContext("2d")!;
+  ctx.scale(scale, scale);
+  ctx.drawImage(canvas, 0, 0); // Redraw original canvas content
+
+  const dataURL = offscreen.toDataURL("image/png");
   const newTab = globalThis.open();
   if (newTab) {
     newTab.document.body.innerHTML =
-      `<img src="${dataURL}" alt="Exported Drawing"/>`;
+      `<img src="${dataURL}" style="image-rendering: auto" alt="Exported Drawing"/>`;
   }
 });
 
