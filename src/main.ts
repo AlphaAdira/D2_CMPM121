@@ -21,7 +21,7 @@ if (!ctx) {
 
 const currentStyle = {
   width: 3,
-  color: "#fff",
+  color: "#000",
 };
 
 document.body.append(document.createElement("br"));
@@ -79,19 +79,19 @@ document.body.append(document.createElement("br"));
 type ToolMode = "draw" | "sticker";
 let toolMode: ToolMode = "draw";
 
-const thinBtn = createButton("thin + red", () => {
+const thinBtn = createButton("thin", () => {
   toolMode = "draw";
   currentStyle.width = 3;
-  currentStyle.color = "#f00";
-  removeSelections();
+  removeStickerSelections();
+  removePenSelections();
   thinBtn.classList.add("selected");
 });
 
-const thickBtn = createButton("thick + blue", () => {
+const thickBtn = createButton("thick", () => {
   toolMode = "draw";
-  currentStyle.width = 30;
-  currentStyle.color = "#00f";
-  removeSelections();
+  currentStyle.width = 15;
+  removeStickerSelections();
+  removePenSelections();
   thickBtn.classList.add("selected");
 });
 
@@ -99,7 +99,8 @@ const eraserBtn = createButton("eraser", () => {
   toolMode = "draw";
   currentStyle.width = 10;
   currentStyle.color = "#fff";
-  removeSelections();
+  removeStickerSelections();
+  removePenSelections();
   eraserBtn.classList.add("selected");
 });
 
@@ -116,14 +117,16 @@ let currentSticker = batImage;
 const batSticker = createButton("🦇", () => {
   toolMode = "sticker";
   currentSticker = batImage;
-  removeSelections();
+  removeStickerSelections();
+  removePenSelections();
   batSticker.classList.add("selected");
 });
 
 const bloodSticker = createButton("🩸", () => {
   toolMode = "sticker";
   currentSticker = bloodImage;
-  removeSelections();
+  removeStickerSelections();
+  removePenSelections();
   bloodSticker.classList.add("selected");
 });
 
@@ -151,7 +154,8 @@ const userSticker = createButton("custom text button", () => {
     const customSticker = createUserSticker(text);
     currentSticker = customSticker;
   }
-  removeSelections();
+  removeStickerSelections();
+  removePenSelections();
   userSticker.classList.add("selected");
 });
 
@@ -176,13 +180,16 @@ createButton("export", () => {
   }
 });
 
-function removeSelections() {
+// Helper to manage button selections
+function removeStickerSelections() {
   batSticker.classList.remove("selected");
   bloodSticker.classList.remove("selected");
+  userSticker.classList.remove("selected");
+}
+function removePenSelections() {
   thinBtn.classList.remove("selected");
   thickBtn.classList.remove("selected");
   eraserBtn.classList.remove("selected");
-  userSticker.classList.remove("selected");
 }
 
 const cursor = { active: false, x: 0, y: 0 };
