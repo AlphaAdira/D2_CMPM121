@@ -145,6 +145,7 @@ let currentSticker = batImage;
 
 const batSticker = createButton("🦇", () => {
   currentStyle.color = "#fff";
+  currentStyle.width = 10;
   toolMode = "sticker";
   currentSticker = batImage;
   removeStickerSelections();
@@ -155,6 +156,7 @@ const batSticker = createButton("🦇", () => {
 
 const bloodSticker = createButton("🩸", () => {
   currentStyle.color = "#fff";
+  currentStyle.width = 10;
   toolMode = "sticker";
   currentSticker = bloodImage;
   removeStickerSelections();
@@ -182,6 +184,7 @@ function createUserSticker(text: string) {
 }
 const userSticker = createButton("custom text button", () => {
   currentStyle.color = "#fff";
+  currentStyle.width = 10;
   toolMode = "sticker";
   const text = prompt("Enter text for your custom sticker:", "Adira");
   if (text) {
