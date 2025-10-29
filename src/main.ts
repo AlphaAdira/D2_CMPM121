@@ -129,17 +129,19 @@ const bloodSticker = createButton("🩸", () => {
 
 function createUserSticker(text: string) {
   const userText = document.createElement("canvas");
-  userText.width = text.length * 10;
-  userText.height = 40;
   const UserSticker = userText.getContext("2d");
   if (!UserSticker) {
     throw new Error("UserSticker is null");
   }
+  const textWidth = UserSticker.measureText(text).width;
+  userText.width = textWidth + 20; // padding
+  userText.height = userText.width;
 
   UserSticker.fillStyle = "#000";
-  UserSticker.font = 'bold 15px "Press Start 2P", cursive, sans-serif';
+  UserSticker.font = 'bold 15px "Comic Sans MS", cursive, sans-serif';
   UserSticker.textAlign = "center";
-  UserSticker.fillText(text, userText.width / 2, userText.height / 1.5);
+  UserSticker.textBaseline = "middle";
+  UserSticker.fillText(text, userText.width / 2, userText.height / 2);
   return userText.toDataURL("image/png");
 }
 const userSticker = createButton("custom text button", () => {
