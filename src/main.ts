@@ -3,7 +3,7 @@ import bloodImage from "./blood.webp";
 import "./style.css";
 
 document.body.innerHTML = `
-  <h1>[App Title]</h1>
+  <h1>Adira's Drawing App</h1>
 `;
 
 const canvasSize = 256;
@@ -18,10 +18,12 @@ const ctx = canvas.getContext("2d");
 if (!ctx) {
   throw new Error("ctx is null");
 }
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const currentStyle = {
-  width: 3,
-  color: "#000",
+  width: 0,
+  color: "#fff",
 };
 
 document.body.append(document.createElement("br"));
@@ -105,6 +107,33 @@ const eraserBtn = createButton("eraser", () => {
 });
 
 document.body.append(document.createElement("br"));
+// colors go below brushes
+
+const redBtn = createButton("❤️", () => {
+  toolMode = "draw";
+  currentStyle.color = "#FF0000";
+  removeStickerSelections();
+  removeColorSelections();
+  redBtn.classList.add("selected");
+});
+
+const greenBtn = createButton("💚", () => {
+  toolMode = "draw";
+  currentStyle.color = "#00FF00";
+  removeStickerSelections();
+  removeColorSelections();
+  greenBtn.classList.add("selected");
+});
+
+const blueBtn = createButton("💙", () => {
+  toolMode = "draw";
+  currentStyle.color = "#0000FF";
+  removeStickerSelections();
+  removeColorSelections();
+  blueBtn.classList.add("selected");
+});
+
+document.body.append(document.createElement("br"));
 // stamps go below brushes
 
 interface Sticker {
@@ -170,7 +199,7 @@ createButton("export", () => {
 
   const ctx = offscreen.getContext("2d")!;
   ctx.scale(scale, scale);
-  ctx.drawImage(canvas, 0, 0); // Redraw original canvas content
+  ctx.drawImage(canvas, 0, 0);
 
   const dataURL = offscreen.toDataURL("image/png");
   const newTab = globalThis.open();
@@ -190,6 +219,11 @@ function removePenSelections() {
   thinBtn.classList.remove("selected");
   thickBtn.classList.remove("selected");
   eraserBtn.classList.remove("selected");
+}
+function removeColorSelections() {
+  blueBtn.classList.remove("selected");
+  greenBtn.classList.remove("selected");
+  redBtn.classList.remove("selected");
 }
 
 const cursor = { active: false, x: 0, y: 0 };
@@ -298,6 +332,8 @@ function redraw() {
   }
   // Draw all lines (existing code)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawnLines.forEach((line) => {
     ctx.lineWidth = line.width;

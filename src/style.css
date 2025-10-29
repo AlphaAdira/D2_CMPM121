@@ -2,16 +2,13 @@ body {
   font-family: Arial, sans-serif;
   text-align: center;
   margin: 50px;
-}
-.icon {
-  width: 64px;
-  vertical-align: top;
-  border: 1px solid salmon;
+  background-color: #ec99f7;
 }
 #drawingCanvas {
   border: 1px solid #000000;
   border-radius: 10px;
   cursor: none;
+  filter: drop-shadow(10px 10px 3px #00000033);
 }
 .selected {
   background-color: #aaa;
@@ -24,6 +21,7 @@ button {
   border-radius: 10px;
   background-color: #eee;
   border: 2px solid #000;
+  filter: drop-shadow(3px 3px 3px #00000055);
 }
 button:hover {
   background-color: #ddd;
